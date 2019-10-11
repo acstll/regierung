@@ -2,7 +2,7 @@ const documentElement = document && document.documentElement
 const noop = () => {}
 
 const defaults = {
-  select: (root) => [...root.querySelectorAll('[data-module]')],
+  select: (root) => [].slice.call(root.querySelectorAll('[data-module]')),
   getName: (element) => element.getAttribute('data-module'),
   getMediaQuery: (element) => element.getAttribute('data-module-media'),
   getModule: (name) => Promise.resolve(self[name]),
@@ -26,6 +26,7 @@ export function run (root = documentElement, options = {}) {
       element,
       load: () => getModule(name).then(getFactory),
       loading: false,
+      loaded: false,
       destroy: noop,
       media: getMedia(getMediaQuery(element))
     }
@@ -41,7 +42,7 @@ export function destroy (modules, shouldCleanUp = false) {
 
   modules.forEach(mod => {
     if (shouldCleanUp && mod.destroy) mod.destroy()
-    mod.unmount && mod.unmount()
+    unmount(mod)
   })
 }
 
@@ -59,10 +60,12 @@ function listen (mod) {
 function mount (mod) {
   if (mod.loading) return
   mod.loading = true
-  mod.load().then(factory => {
+  mod.loaded = mod.load().then(factory => {
+    // TODO throw if `factory` is undefined
     mod.mount = factory.bind(null, mod.element)
     mod.unmount = mod.mount() || noop
     mod.loading = false
+    return true
   })
 
   return mod
@@ -70,6 +73,7 @@ function mount (mod) {
 
 function unmount (mod) {
   mod.unmount && mod.unmount()
+  mod.loaded = false
   return mod
 }
 
