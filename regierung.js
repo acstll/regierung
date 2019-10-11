@@ -2,7 +2,7 @@ const documentElement = document && document.documentElement
 const noop = () => {}
 
 const defaults = {
-  select: (root) => [].slice.call(root.querySelectorAll('[data-module]')),
+  select: (root) => root.querySelectorAll('[data-module]'),
   getName: (element) => element.getAttribute('data-module'),
   getMediaQuery: (element) => element.getAttribute('data-module-media'),
   getModule: (name) => Promise.resolve(self[name]),
@@ -14,9 +14,14 @@ export function run (root = documentElement, options = {}) {
     ...defaults,
     ...options
   }
+  const modules = []
   const elements = config.select(root)
 
-  return elements.map(init)
+  for (let i = 0; i < elements.length; i++) {
+    modules.push(init(elements[i]))
+  }
+
+  return modules
 
   function init (element) {
     const { getName, getMediaQuery, getModule, getFactory } = config
