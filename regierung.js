@@ -1,5 +1,3 @@
-/* global self */
-
 const documentElement = document && document.documentElement
 const noop = () => {}
 
