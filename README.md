@@ -1,6 +1,6 @@
 # Regierung
 
-Organize your website's JavaScript
+~~Organize~~ Govern your website's JavaScript
 
 ## TODO
 

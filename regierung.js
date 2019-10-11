@@ -6,6 +6,7 @@ const noop = () => {}
 const defaults = {
   select: (root) => [...root.querySelectorAll('[data-module]')],
   getName: (element) => element.getAttribute('data-module'),
+  getMediaQuery: (element) => element.getAttribute('data-module-media'),
   getModule: (name) => Promise.resolve(self[name]),
   getFactory: (mod) => mod
 }
@@ -20,7 +21,7 @@ export function run (root = documentElement, options = {}) {
   return elements.map(init)
 
   function init (element) {
-    const { getName, getModule, getFactory } = config
+    const { getName, getMediaQuery, getModule, getFactory } = config
     const name = getName(element)
     const mod = {
       name,
@@ -28,7 +29,7 @@ export function run (root = documentElement, options = {}) {
       load: () => getModule(name).then(getFactory),
       loading: false,
       destroy: noop,
-      media: getMedia(element)
+      media: getMedia(getMediaQuery(element))
     }
 
     return mod.media ? listen(mod) : mount(mod)
@@ -48,16 +49,13 @@ export function destroy (modules, shouldCleanUp = false) {
 
 function listen (mod) {
   const { media } = mod
+  const listener = mq => mq.matches ? mount(mod) : unmount(mod)
 
   media.addListener(listener)
-  mod.destroy = () => mod.media.removeListener(listener)
+  mod.destroy = () => media.removeListener(listener)
   listener(media)
 
   return mod
-
-  function listener (mq) {
-    mq.matches ? mount(mod) : unmount(mod)
-  }
 }
 
 function mount (mod) {
@@ -77,8 +75,6 @@ function unmount (mod) {
   return mod
 }
 
-function getMedia (element) {
-  const query = element.getAttribute('data-module-media')
-  if (!query) return false
-  return window.matchMedia(query)
+function getMedia (query) {
+  return !query ? false : window.matchMedia(query)
 }
