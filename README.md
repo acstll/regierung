@@ -6,4 +6,5 @@ Organize your website's JavaScript
 
 - [ ] Finish this document
 - [ ] Add tests
+- [ ] Add build step and publish to npm
 - [ ] Add CHANGELOG
