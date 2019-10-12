@@ -1,21 +1,24 @@
 const documentElement = document && document.documentElement
 const noop = () => {}
+const getMedia = (query) => !query ? false : window.matchMedia(query)
 
 const defaults = {
-  select: (root) => root.querySelectorAll('[data-module]'),
-  getName: (element) => element.getAttribute('data-module'),
-  getMediaQuery: (element) => element.getAttribute('data-module-media'),
+  moduleAttributeName: 'data-module',
+  mediaAttributeName: 'data-module-media',
   getModule: (name) => Promise.resolve(self[name]),
   getFactory: (mod) => mod
 }
 
 export function run (root = documentElement, options = {}) {
-  const config = {
-    ...defaults,
-    ...options
-  }
+  const config = { ...defaults, ...options }
+  const {
+    moduleAttributeName,
+    mediaAttributeName,
+    getModule,
+    getFactory
+  } = config
   const modules = []
-  const elements = config.select(root)
+  const elements = root.querySelectorAll('[' + moduleAttributeName + ']')
 
   for (let i = 0; i < elements.length; i++) {
     modules.push(init(elements[i]))
@@ -24,8 +27,7 @@ export function run (root = documentElement, options = {}) {
   return modules
 
   function init (element) {
-    const { getName, getMediaQuery, getModule, getFactory } = config
-    const name = getName(element)
+    const name = element.getAttribute(moduleAttributeName)
     const mod = {
       name,
       element,
@@ -33,7 +35,7 @@ export function run (root = documentElement, options = {}) {
       loading: false,
       loaded: false,
       destroy: noop,
-      media: getMedia(getMediaQuery(element))
+      media: getMedia(element.getAttribute(mediaAttributeName))
     }
 
     return mod.media ? listen(mod) : mount(mod)
@@ -42,7 +44,7 @@ export function run (root = documentElement, options = {}) {
 
 export function destroy (modules, shouldCleanUp = false) {
   if (!Array.isArray(modules)) {
-    throw new TypeError('The `destroy` method expects an array of modules returned by `run`')
+    throw new TypeError("The 'destroy' method expects an array of modules returned by 'run'")
   }
 
   modules.forEach(mod => {
@@ -58,7 +60,6 @@ function listen (mod) {
   media.addListener(listener)
   mod.destroy = () => media.removeListener(listener)
   listener(media)
-
   return mod
 }
 
@@ -66,13 +67,14 @@ function mount (mod) {
   if (mod.loading) return
   mod.loading = true
   mod.loaded = mod.load().then(factory => {
-    // TODO throw if `factory` is undefined
+    if (factory == null) {
+      throw new Error(`Module with name '${mod.name}' couldn't be found`)
+    }
     mod.mount = factory.bind(null, mod.element)
     mod.unmount = mod.mount() || noop
     mod.loading = false
     return true
   })
-
   return mod
 }
 
@@ -80,8 +82,4 @@ function unmount (mod) {
   mod.unmount && mod.unmount()
   mod.loaded = false
   return mod
-}
-
-function getMedia (query) {
-  return !query ? false : window.matchMedia(query)
 }

@@ -5,6 +5,6 @@
 ## TODO
 
 - [ ] Finish this document
-- [ ] Add tests
-- [ ] Add build step and publish to npm
+- [x] Add tests
+- [ ] ~~Add build step and~~ publish to npm
 - [ ] Add CHANGELOG

@@ -10,7 +10,7 @@
     "watch:build": "rollup -c -w",
     "watch:test": "jest --watch",
     "test": "jest",
-    "lint": "standard '**.js' --env jest",
+    "lint": "standard '**.js'",
     "build": "rollup -c",
     "pretest": "npm run lint && npm run build",
     "prepublish": "npm run test"
