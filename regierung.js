@@ -9,7 +9,11 @@ const defaults = {
   getFactory: (mod) => mod
 }
 
-export function run (root = documentElement, options = {}) {
+const regierung = { run, destroy }
+
+export default regierung
+
+function run (root = documentElement, options = {}) {
   const config = { ...defaults, ...options }
   const {
     moduleAttributeName,
@@ -24,7 +28,7 @@ export function run (root = documentElement, options = {}) {
     modules.push(init(elements[i]))
   }
 
-  return modules
+  return Promise.all(modules)
 
   function init (element) {
     const name = element.getAttribute(moduleAttributeName)
@@ -32,7 +36,6 @@ export function run (root = documentElement, options = {}) {
       name,
       element,
       load: () => getModule(name).then(getFactory),
-      loading: false,
       loaded: false,
       destroy: noop,
       media: getMedia(element.getAttribute(mediaAttributeName))
@@ -42,7 +45,7 @@ export function run (root = documentElement, options = {}) {
   }
 }
 
-export function destroy (modules, shouldCleanUp = false) {
+function destroy (modules, shouldCleanUp = false) {
   if (!Array.isArray(modules)) {
     throw new TypeError("The 'destroy' method expects an array of modules returned by 'run'")
   }
@@ -55,24 +58,22 @@ export function destroy (modules, shouldCleanUp = false) {
 
 function listen (mod) {
   const { media } = mod
-  const listener = mq => mq.matches ? mount(mod) : unmount(mod)
 
-  media.addListener(listener)
-  mod.destroy = () => media.removeListener(listener)
-  listener(media)
+  media.onchange = mq => mq.matches ? mount(mod) : unmount(mod)
+  mod.destroy = () => { media.onchange = null }
+  media.onchange(media)
   return mod
 }
 
 function mount (mod) {
-  if (mod.loading) return
-  mod.loading = true
   mod.loaded = mod.load().then(factory => {
     if (factory == null) {
-      throw new Error(`Module with name '${mod.name}' couldn't be found`)
+      return Promise.reject(
+        new Error(`Module with name '${mod.name}' couldn't be found`)
+      )
     }
     mod.mount = factory.bind(null, mod.element)
     mod.unmount = mod.mount() || noop
-    mod.loading = false
     return true
   })
   return mod
