@@ -7,4 +7,4 @@
 - [ ] Finish this document
 - [x] Add tests
 - [ ] ~~Add build step and~~ publish to npm
-- [ ] Add CHANGELOG
+- [x] Add CHANGELOG
