@@ -71,7 +71,7 @@ test('destroy()', async function () {
   expect(el.textContent).toBe('1')
   expect(modules[0].loaded).toBe(false)
   expect(() => destroy()).toThrow(
-    "The 'destroy' method expects an array of modules returned by 'run'"
+    "The 'destroy' method expects an array of modules resolved by 'run'"
   )
 })
 

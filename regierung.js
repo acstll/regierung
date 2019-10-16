@@ -47,7 +47,7 @@ function run (root = documentElement, options = {}) {
 
 function destroy (modules, shouldCleanUp = false) {
   if (!Array.isArray(modules)) {
-    throw new TypeError("The 'destroy' method expects an array of modules returned by 'run'")
+    throw new TypeError("The 'destroy' method expects an array of modules resolved by 'run'")
   }
 
   modules.forEach(mod => {
