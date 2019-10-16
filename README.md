@@ -4,7 +4,7 @@
 
 ## TODO
 
-- [ ] Finish this document
 - [x] Add tests
-- [ ] ~~Add build step and~~ publish to npm
 - [x] Add CHANGELOG
+- [ ] Finish this document (https://github.com/RichardLitt/standard-readme)
+- [ ] ~~Add build step and~~ publish to npm
