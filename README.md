@@ -60,9 +60,11 @@ And you get:
 
 Without any configuration, Regierung expects all modules to be globally available, that is attached to `window`. But you're probably doing better…
 
-### Code-splitting
+### Code splitting
 
 Regierung truly shines when used together with a modern module bundler like [Webpack](https://webpack.js.org/), [Parcel](https://parceljs.org/) or [Rollup](https://rollupjs.org/guide/en/).
+
+This way you can have your modules organized in files, and they will be loaded only when needed.
 
 You need to tell Regierung how to find your modules, using [dynamic `import`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import):
 
@@ -74,8 +76,6 @@ run({
   getFactory: mod => mod.default
 })
 ```
-
-This way you can have your modules organized in files, and they will be loaded only when needed.
 
 The module from earlier:
 
@@ -100,7 +100,7 @@ The HTML:
 </p>
 ```
 
-Notice you give it the name of the file in the `data-module` attribute (`upper`), and you specify the path to it in the `getModule` callback (`./modules/${name}.js\`).
+Notice you give it the name of the file in the `data-module` attribute (`upper`), and you specify the path to it in the `getModule` callback (`./modules/${name}.js`).
 
 ## Contributing
 
