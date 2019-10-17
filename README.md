@@ -1,5 +1,7 @@
 # Regierung
 
+![npm](https://img.shields.io/npm/v/regierung)
+
 > ~~Organize~~ Govern your website's JavaScript
 
 This package is a bare-bones implementation of the awesome [Conditioner](https://github.com/rikschennink/conditioner) library. It solves the same problem but with less features and less complexity.
