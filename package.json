@@ -9,7 +9,7 @@
     "dev": "run-p watch:*",
     "watch:build": "rollup -c -w",
     "watch:test": "jest --watch",
-    "test": "jest",
+    "test": "jest --coverage",
     "lint": "prettier-standard '**.js' && standard '**.js'",
     "build": "rollup -c",
     "pretest": "npm run lint && npm run build",
