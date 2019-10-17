@@ -1,6 +1,6 @@
 {
   "name": "regierung",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Govern your website's JavaScript",
   "main": "dist/regierung.cjs.js",
   "module": "dist/regierung.esm.js",
