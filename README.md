@@ -102,6 +102,18 @@ The HTML:
 
 Notice you give it the name of the file in the `data-module` attribute (`upper`), and you specify the path to it in the `getModule` callback (`./modules/${name}.js`).
 
+### Media queries
+
+You can have your modules run based on a media query, via the `data-module-media` attribute:
+
+```html
+<p data-module="upper" data-module-media="(min-width: 60em)">
+  Alles wird besser, aber nichts wird gut.
+</p>
+```
+
+This uses the [`matchMedia` API](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia), so it will react to the browser window resizing.
+
 ## Contributing
 
 PRs accepted.
