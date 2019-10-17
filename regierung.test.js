@@ -45,17 +45,18 @@ test('run()', async function () {
   expect(el.textContent).toBe('Hello')
 })
 
-test('run() first argument', async function () {
+test('run() `root` option', async function () {
   const root = document.querySelector('.wrapper')
   const el = root.querySelectorAll('[data-module="greet"]')[0]
   expect(el.textContent).toBe('2')
-  const modules = await run(root)
+  const modules = await run({ root })
   expect(modules.length).toBe(2)
 })
 
 test('run() `moduleAttributeName` option', async function () {
   const el = document.querySelectorAll('[data-module-different="greet"]')[0]
-  const modules = await run(document, {
+  const modules = await run({
+    root: document,
     moduleAttributeName: 'data-module-different'
   })
   expect(modules.length).toBe(1)

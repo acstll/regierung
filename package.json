@@ -23,7 +23,9 @@
     "url": "git+https://github.com/acstll/regierung.git"
   },
   "keywords": [
-    "modules", "webpack", "parcel"
+    "modules",
+    "webpack",
+    "parcel"
   ],
   "author": "Arturo Castillo Delgado <arturo@arturu.com>",
   "license": "Apache-2.0",

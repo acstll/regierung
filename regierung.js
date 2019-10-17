@@ -1,26 +1,20 @@
-const documentElement = document && document.documentElement
 const noop = () => {}
 const getMedia = query => (!query ? false : window.matchMedia(query))
 
 const defaults = {
+  root: document && document.documentElement,
   moduleAttributeName: 'data-module',
   mediaAttributeName: 'data-module-media',
-  getModule: name => Promise.resolve(self[name]),
-  getFactory: mod => mod
+  getModule: name => Promise.resolve(self[name])
 }
 
 const regierung = { run, destroy }
 
 export default regierung
 
-function run (root = documentElement, options = {}) {
+function run (options = {}) {
   const config = { ...defaults, ...options }
-  const {
-    moduleAttributeName,
-    mediaAttributeName,
-    getModule,
-    getFactory
-  } = config
+  const { root, moduleAttributeName, mediaAttributeName, getModule } = config
   const modules = []
   const elements = root.querySelectorAll('[' + moduleAttributeName + ']')
 
@@ -35,7 +29,7 @@ function run (root = documentElement, options = {}) {
     const mod = {
       name,
       element,
-      load: () => getModule(name).then(getFactory),
+      load: () => getModule(name),
       loaded: false,
       destroy: noop,
       media: getMedia(element.getAttribute(mediaAttributeName))

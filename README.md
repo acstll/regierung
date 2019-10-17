@@ -72,8 +72,7 @@ You need to tell Regierung how to find your modules, using [dynamic `import`](ht
 import { run } from 'regierung'
 
 run({
-  getModule: name => import(`./modules/${name}.js`),
-  getFactory: mod => mod.default
+  getModule: name => import(`./modules/${name}.js`).then(x => x.default)
 })
 ```
 
