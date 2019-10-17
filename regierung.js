@@ -1,12 +1,12 @@
 const documentElement = document && document.documentElement
 const noop = () => {}
-const getMedia = (query) => !query ? false : window.matchMedia(query)
+const getMedia = query => (!query ? false : window.matchMedia(query))
 
 const defaults = {
   moduleAttributeName: 'data-module',
   mediaAttributeName: 'data-module-media',
-  getModule: (name) => Promise.resolve(self[name]),
-  getFactory: (mod) => mod
+  getModule: name => Promise.resolve(self[name]),
+  getFactory: mod => mod
 }
 
 const regierung = { run, destroy }
@@ -47,7 +47,9 @@ function run (root = documentElement, options = {}) {
 
 function destroy (modules, shouldCleanUp = false) {
   if (!Array.isArray(modules)) {
-    throw new TypeError("The 'destroy' method expects an array of modules resolved by 'run'")
+    throw new TypeError(
+      "The 'destroy' method expects an array of modules resolved by 'run'"
+    )
   }
 
   modules.forEach(mod => {
@@ -59,9 +61,12 @@ function destroy (modules, shouldCleanUp = false) {
 function listen (mod) {
   const { media } = mod
 
-  media.onchange = mq => mq.matches ? mount(mod) : unmount(mod)
-  mod.destroy = () => { media.onchange = null }
+  media.onchange = mq => (mq.matches ? mount(mod) : unmount(mod))
+  mod.destroy = () => {
+    media.onchange = null
+  }
   media.onchange(media)
+
   return mod
 }
 
@@ -76,11 +81,13 @@ function mount (mod) {
     mod.unmount = mod.mount() || noop
     return true
   })
+
   return mod
 }
 
 function unmount (mod) {
   mod.unmount && mod.unmount()
   mod.loaded = false
+
   return mod
 }

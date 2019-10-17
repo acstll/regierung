@@ -36,8 +36,6 @@ export default [
       file: pkg.module,
       format: 'es'
     },
-    plugins: [
-      prettier(prettierOptions)
-    ]
+    plugins: [prettier(prettierOptions)]
   }
 ]
