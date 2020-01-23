@@ -13,7 +13,7 @@
     "lint": "prettier-standard '**.js' && standard '**.js'",
     "build": "rollup -c",
     "pretest": "npm run lint && npm run build",
-    "prepublish": "npm run test"
+    "prepublishOnly": "npm run test"
   },
   "files": [
     "dist"
