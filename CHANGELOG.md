@@ -6,7 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+[Unreleased]: https://github.com/acstll/regierung
+
+## [2.0.0] - 2020-01-23
+
+[2.0.0]: https://github.com/acstll/regierung/releases/tag/v2.0.0
+
+### Changed
+- Use named exports only (this should only affect module bundlers)
+- Rename internal `destroy` method to `stopPublishing` for clarity
+
 ## [1.0.0] - 2019-10-17
 
-[Unreleased]: https://github.com/acstll/regierung
 [1.0.0]: https://github.com/acstll/regierung/releases/tag/v1.0.0
