@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Use named exports only (this should only affect module bundlers)
-- Rename internal `destroy` method to `stopPublishing` for clarity
+- Rename internal `destroy` method to `stopListening` for clarity
 
 ## [1.0.0] - 2019-10-17
 
