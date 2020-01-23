@@ -8,11 +8,7 @@ const defaults = {
   getModule: name => Promise.resolve(self[name])
 }
 
-const regierung = { run, destroy }
-
-export default regierung
-
-function run (options = {}) {
+export function run (options = {}) {
   const config = { ...defaults, ...options }
   const { root, moduleAttributeName, mediaAttributeName, getModule } = config
   const modules = []
@@ -31,7 +27,7 @@ function run (options = {}) {
       element,
       load: () => getModule(name),
       loaded: false,
-      destroy: noop,
+      stopListening: noop,
       media: getMedia(element.getAttribute(mediaAttributeName))
     }
 
@@ -39,7 +35,7 @@ function run (options = {}) {
   }
 }
 
-function destroy (modules, shouldCleanUp = false) {
+export function destroy (modules, shouldCleanUp = false) {
   if (!Array.isArray(modules)) {
     throw new TypeError(
       "The 'destroy' method expects an array of modules resolved by 'run'"
@@ -47,7 +43,7 @@ function destroy (modules, shouldCleanUp = false) {
   }
 
   modules.forEach(mod => {
-    if (shouldCleanUp && mod.destroy) mod.destroy()
+    if (shouldCleanUp && mod.stopListening) mod.stopListening()
     unmount(mod)
   })
 }
@@ -56,7 +52,7 @@ function listen (mod) {
   const { media } = mod
 
   media.onchange = mq => (mq.matches ? mount(mod) : unmount(mod))
-  mod.destroy = () => {
+  mod.stopListening = () => {
     media.onchange = null
   }
   media.onchange(media)

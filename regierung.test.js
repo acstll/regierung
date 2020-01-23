@@ -85,17 +85,17 @@ test('media and destroy(modules, true)', async function () {
   expect(media.matches).toBeFalsy()
   expect(media.media).toBe('(min-width: 40em)')
   expect(typeof media.onchange).toBe('function')
-  expect(typeof mod.destroy).toBe('function')
+  expect(typeof mod.stopListening).toBe('function')
   media.matches = true
   media.onchange(media)
   await mod.loaded
   expect(el.textContent).toBe('Hello')
-  const originalDestroy = mod.destroy
-  mod.destroy = jest.fn()
+  const originalStopListening = mod.stopListening
+  mod.stopListening = jest.fn()
   destroy(modules, true)
-  expect(mod.destroy).toHaveBeenCalled()
+  expect(mod.stopListening).toHaveBeenCalled()
   expect(el.textContent).toBe('3')
-  originalDestroy()
+  originalStopListening()
   expect(media.onchange).toBeNull()
 })
 
